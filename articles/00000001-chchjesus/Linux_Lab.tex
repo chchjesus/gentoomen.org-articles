@@ -1,0 +1,203 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+
+\begin{document}
+
+\title{Introduction to using Linux}
+\author{Cody Harrington\\University of Canterbury Computer Society}
+\date{\today}
+\maketitle
+
+\section{Why you should use Linux}
+\begin{itemize}
+\item Because it costs you nothing.
+\item Because some university courses expect you to, so deal with it.
+\item Because the design philosophy caters towards being a power-user of your computer.
+\item Because it makes you look like a s00per c00l haxor
+\end{itemize}
+
+\section{The Linux philosophy}
+The idea of Linux is simple-To take the idea of UNIX, which is to have a collection of programs and modules that work cohesively together-and make a free, open and community driven operating system that can be edited and customised to your heart's content.
+
+\section{A Brief History}
+
+I will gloss over a brief history of the origin and etymology of Linux. For more information on this subject, there is plenty of detailed history on the internet.
+
+\subsection{The GNU coreutils}
+In 1983, a large hairy man by the name of Richard Stallman was part of a programmer hobbyist group (read: early hackers) at Massachusetts Institute of Technology (MIT). He had become unhappy with this new operating system that had been created at Bell Labs, called Unix, because it was closed source and had become proprietary software. He worked tirelessly to replicate the output of the Bell Labs programmers, but instead as a free, non-proprietary system which resulted in the GNU Coreutils: the main software which makes up Linux (GNU being a recursive acronym for "GNU's Not Unix"). However, the kernel he had written didn't catch on, so for now his project was unsuccessful.
+
+\subsection{The kernel}
+The linux kernel was written by Finnish programmer Linus Torvalds in 1991 as a hobby, which was a free and open-source alternative to a popular operating system at the time called MINIX. He wanted to name it Freax (Freak + Free + x), but eventually settled on Linux (Linus + x) at the advice of a friend. Once he had written the kernel, seeing the GNU project that had been written and released under the GNU General Public Licence (GPL), he took that work and combined it with his kernel, forming the first incarnation of what we know today as Linux.
+
+\section{Distributions}
+The base system of Linux comes in many different distributions which contain different packages and features, written by different groups. These are referred to as distros for short, and they have a wide variety of different uses, purposes, system, features, and fanbases.
+This guide will attempt to be distro-independent, however, a few of the more popular distros are listed:
+\begin{itemize}
+\item Ubuntu
+\item Debian
+\item Fedora
+\item Linux Mint
+\item Arch Linux
+\item Gentoo
+\end{itemize}
+A quick internet search can list more and describe the pros and cons of most distributions out there. Protip: There are thousands of distos.
+
+\subsection{Package manager and repositories}
+Each distribution comes with a package manager, which handles software installed on the system, and also has a number of remote repositories from which it gets its software. For example, Ubuntu uses a package manager called aptitude (apt for short). You can type:
+\begin{verbatim}
+sudo apt-get install firefox
+\end{verbatim}
+to install the Mozilla Firefox web browser. It will search the remote repositories (listed in /etc/apt/sources.list) for the required packages and instructions to install them. Then it will install the software on your computer for you. The package manager can also update and remove software, and manage your local package database. This is one of the brilliant things of the package manager: you can run a single command and you've installed new software. You can run a single command, and update all your packages, etc.
+
+\section{The X Window System}
+
+\subsection{Xorg server}
+Because at its core, Linux is just a text-based system, it has the Xorg server to provide graphical windows. Xorg is a program that runs in the background (called a \emph{daemon}) that simply runs the windows for your display. It is a very simplistic server, with which clients communicate with to display your windows. If you're \emph{especially} hardcore, you can install a Linux system without an Xorg server, and just interact with the terminal. 
+
+\subsection{Window manager}
+A window manager is a piece of software that will change your window display and add more functionality, or allow you to customise it. It works as a client which interfaces with the Xorg server, and that's all a window manager really does-it manages windows. There are many different managers out there-some of them which work completely differently to how a window system would conventionally work on other systems.
+
+\subsection{Desktop Environment}
+A desktop environment is a fully-fledged graphical display suite that adds extra features that the Window manger can't do.  Desktop environments usually include their own Window managers among other things, and because linux is so flexible, some people usually just skip the Desktop environment and install a Window manager because they want a lightweight system. A few examples of Desktop Environments are KDE, Gnome, Unity, XFCE, etc. Note that a Linux distro is not a desktop environment or window manager. In fact, most distros can be made to look quite similar by running the same desktop environments or window managers, such as the GNOME desktop environment.
+
+\section{The Terminal}
+The terminal, also know as the Command Line, Shell, or just cold, emotionless text on a black background, gives you access to the real power and beating heart of Linux. This is what we will be focusing mostly on in this guide. Linux by default uses BASH, or Bourne-Again Shell, which is based on the shell program 'sh' from UNIX. Bash will be all of our terminal interaction. 
+
+The terminal uses files called stdout, stdin and stderr to handle text input and output to and from programs.
+
+\begin{itemize}
+\item \textbf{stdin} - Standard Input - All your typed text input goes into programs through here.
+\item \textbf{stdout} - Standard Output - All successful program output goes to here.
+\item \textbf{stderr} - Standard Error - All error messages and problem codes go to here. 
+\end{itemize}
+For now we'll just focus on stdin and stdout.
+
+\subsection{Terminal commands}
+Firstly you should get familiar with the man pages, which are essentially the manual, and will display help pages on almost all commands.
+\begin{verbatim}
+Usage: man COMMAND
+\end{verbatim}
+Where COMMAND is replaced with whatever command you want help on. Press 'q' to exit a manual page.
+
+Now that you know how to use the manual, here is a list of the essential commands that you should become familiar with (and you can use the manual to learn how to use them): 
+\begin{verbatim}
+cd	# Change directory
+ls	# Show contents of directory
+echo	# Print text to the screen
+cat	# Display contents of a file
+nano	# Edit a file via the command line
+\end{verbatim}
+Some extra commands which aren't essential but are certainly helpful:
+\begin{verbatim}
+grep	# Search for specific text within text
+pwd	# Print working (current) directory
+whoami	# Display user
+ps	# Display running processes
+who	# Display logged on users
+w	# Display logged on users
+which	# Display the path to a command's binary
+df	# Disk space free
+du	# Disk space used
+passwd	# Change user password (not to be confused with pwd)
+more	# Display text one screenful at a time
+less	# Display text one screenful at a time
+wc	# Word/letter/byte count
+id	# Display the uid, gid and groups of a user
+su	# Switch user
+\end{verbatim}
+
+\subsection{Bash conventions}
+There are a number of little quirks that Bash has that give it more functionality.
+Piping takes the stdout of the left program and connects it (i.e. \emph{pipe}s it) into stdin of the right program with the pipe operator $|$. For example:
+\begin{verbatim}
+# Count number of words in helloworld.txt
+cat helloworld.txt | wc -w 
+\end{verbatim}
+Redirection directs data in and out of files, i.e. 
+\begin{verbatim}
+# Redirect stdout to file
+echo "Hello world" > helloworld.txt
+
+# Redirect stdout to the end of a file
+echo "world." >> hello.txt
+
+# Redirect a file to stdin
+more < helloworld.txt
+\end{verbatim}
+
+\section{File system structure}
+The file system is structured as a tree that flows down from the root directory, which is simply represented as /. I've taken a listing of my root directory as an example, using the ls command:
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ ls /
+bin    etc         initrd.img.old  lost+found  proc  selinux  usr
+boot   fixdm       lib             media       root  srv      var
+cdrom  home        lib32           mnt         run   sys      vmlinuz
+dev    initrd.img  lib64           opt         sbin  tmp      vmlinuz.old
+\end{verbatim}
+
+Linux will automatically complete a command or filename if you are part-way through typing it; all you have to do is hit the [Tab] key. Press [Tab] enough times and it will list possible suggestions based on what you currently have typed in the terminal.
+
+\subsection{\$PATH and the environment}
+Linux uses a global terminal variable to find programs. This is the \$PATH variable and it consists of a list of file paths to search in for a specified program, in order, separated by the colon (:). For example, a listing of my path:
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+\end{verbatim}
+This would mean that if I were to use the program 'ls', it would search for a binary file called 'ls' in /usr/local/sbin, then in /usr/local/bin, and so on until it found it. Then it would be executed. Because these are searched in order, if you were to prepend a directory path to the front of \$PATH with your own copy of 'ls' in it, and then run the 'ls' command, then your copy would be run instead.
+
+This is sometimes used as an exploit by modifying the user's \$PATH variable so that a path containing malicious binaries with the same names as common commands is on the front. When the user goes to run these commands, then the malicious binaries are run instead.
+
+\section{Users and permissions}
+Every user has a user ID (uid) and a group ID (gid). Each user also has a list of groups they are a part of which give them the permissions that are assigned to those groups. You can see this by using the 'id' command:
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ id
+uid=1000(cody) gid=1000(cody) groups=1000(cody),4(adm),24(cdrom),27(sudo),29(audio),
+30(dip),44(video),46(plugdev),109(lpadmin),119(pulse),124(sambashare)
+\end{verbatim}
+
+\subsection{sudo and root}
+Now for the most powerful user on Linux: The root user. Root's uid and gid are both 0.
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ id root
+uid=0(root) gid=0(root) groups=0(root)
+\end{verbatim}
+Root is essentially god: root can do anything root likes, where other users would be denied due to the lack of permissions required. Root is the first account created on a newly installed Linux distro, and it is generally encouraged that you do not use the root account unless you absolutely have to because since root can do anything, then there's no stopping you from accidentally deleting something important, for example.
+
+This is where the 'sudo' command comes in (a.k.a "super-user do"). You can use sudo to execute commands that require elevated privileges without having to actually switch to root.
+\begin{quote}
+\textit{
+Super-user do... If anything it means ``Bitch you will do as I say or I will end you''\\
+}
+\textbf{Anonymous}
+\end{quote}
+Say you want to edit the hostname file, which is the name of your computer, but, by default, you need elevated privileges to edit it. You would type:
+\begin{verbatim}
+sudo nano /etc/hostname
+\end{verbatim}
+to which it asks you for your password, and then opens nano with the extra privileges provided by sudo. There is a sudoers file which contains a list of users who can use sudo, and what privileges they get from using it.
+
+\subsection{File permissions}
+Linux inherits its file permissions system from Unix. You can use the command `ls -l' to display the permissions of a file or files:
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~/junk$ ls -l
+total 8
+-rw-rw-r-- 1 cody cody    9 Apr 25 21:28 junk1
+drwxrwxr-x 2 cody cody 4096 Apr 25 21:29 other_junk
+\end{verbatim}
+The first string consists of a sequence of letters, which represent the permissions on the file. The two names refer to the owner and group the file belongs to, respectively.
+
+Lets take the file, junk1, as our example.
+The first character is the file type. This is a `d' if the file is a directory (like other\_junk).
+The next part should be read as three sets of permissions
+\begin{verbatim}
+( u )( g )( o ) 
+(rw-)(rw-)(r--)
+\end{verbatim} 
+where the first set, u, refers to the permissions for the user who owns the file.
+The next set, g, refers to the permissions for the group that the file belongs to.
+The final set, o, refers to the permissions for any other user. 
+Each set uses `rwx' to specify the permission to (r)ead, (w)rite or e(x)ecute, or $-$ if that permission is not set.
+\end{document}
+
+
