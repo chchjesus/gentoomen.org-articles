@@ -1,6 +1,8 @@
 \documentclass{article}
-\usepackage[margin=1in]{geometry}
+\usepackage{fullpage}
 \usepackage{listings}
+\usepackage{url}
+\usepackage{underscore}
 
 \begin{document}
 
@@ -14,7 +16,6 @@
 \item Because it costs you nothing.
 \item Because some university courses expect you to, so deal with it.
 \item Because the design philosophy caters towards being a power-user of your computer.
-\item Because it makes you look like a s00per c00l haxor
 \end{itemize}
 
 \section{The Linux philosophy}
@@ -38,6 +39,8 @@ This guide will attempt to be distro-independent, however, a few of the more pop
 \item Debian
 \item Fedora
 \item Linux Mint
+\item Red Hat
+\item CentOS
 \item Arch Linux
 \item Gentoo
 \end{itemize}
@@ -94,6 +97,8 @@ grep	# Search for specific text within text
 pwd	# Print working (current) directory
 whoami	# Display user
 ps	# Display running processes
+pstree # Display a tree showing running processes and processes they started
+top # Display most intensive running programs
 who	# Display logged on users
 w	# Display logged on users
 which	# Display the path to a command's binary
@@ -107,8 +112,8 @@ id	# Display the uid, gid and groups of a user
 su	# Switch user
 \end{verbatim}
 
-\subsection{Bash conventions}
-There are a number of little quirks that Bash has that give it more functionality.
+\subsection{Shell conventions}
+There are a number of little quirks that the shell has that gives it more functionality.
 Piping takes the stdout of the left program and connects it (i.e. \emph{pipe}s it) into stdin of the right program with the pipe operator $|$. For example:
 \begin{verbatim}
 # Count number of words in helloworld.txt
@@ -135,10 +140,27 @@ boot   fixdm       lib             media       root  srv      var
 cdrom  home        lib32           mnt         run   sys      vmlinuz
 dev    initrd.img  lib64           opt         sbin  tmp      vmlinuz.old
 \end{verbatim}
-
+The standard path is listed as all the directories to a file, separated by the / character.
+You can also use .. to represent the folder that the current folder is in, . to represent the current directory, and \textasciitilde to represent your home directory. For example
+\begin{verbatim}
+# Move two folders up, then into dir1 and then dir2, then back into dir1, then back into dir2
+cd /../../dir1/dir2/../dir2
+# Get a listing of the current directory
+ls .
+# Change into your home directory
+cd ~
+\end{verbatim}
 Linux will automatically complete a command or filename if you are part-way through typing it; all you have to do is hit the [Tab] key. Press [Tab] enough times and it will list possible suggestions based on what you currently have typed in the terminal.
 
 \subsection{\$PATH and the environment}
+Variables in the shell are defined using the \texttt{export} command, and when variables are used, they start with a \$.
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ export FOO="This is a string"
+cody@CODY-STUDIO-XPS:~$ echo $FOO
+This is a string
+\end{verbatim} 
+You can see a list of the set environment variables by typing \texttt{set} by itself into the terminal.
+
 Linux uses a global terminal variable to find programs. This is the \$PATH variable and it consists of a list of file paths to search in for a specified program, in order, separated by the colon (:). For example, a listing of my path:
 \begin{verbatim}
 cody@CODY-STUDIO-XPS:~$ echo $PATH
@@ -165,12 +187,7 @@ uid=0(root) gid=0(root) groups=0(root)
 Root is essentially god: root can do anything root likes, where other users would be denied due to the lack of permissions required. Root is the first account created on a newly installed Linux distro, and it is generally encouraged that you do not use the root account unless you absolutely have to because since root can do anything, then there's no stopping you from accidentally deleting something important, for example.
 
 This is where the 'sudo' command comes in (a.k.a "super-user do"). You can use sudo to execute commands that require elevated privileges without having to actually switch to root.
-\begin{quote}
-\textit{
-Super-user do... If anything it means ``Bitch you will do as I say or I will end you''\\
-}
-\textbf{Anonymous}
-\end{quote}
+
 Say you want to edit the hostname file, which is the name of your computer, but, by default, you need elevated privileges to edit it. You would type:
 \begin{verbatim}
 sudo nano /etc/hostname
@@ -191,13 +208,131 @@ Lets take the file, junk1, as our example.
 The first character is the file type. This is a `d' if the file is a directory (like other\_junk).
 The next part should be read as three sets of permissions
 \begin{verbatim}
-( u )( g )( o ) 
-(rw-)(rw-)(r--)
+-rw-rw-r--
+(d)( u )( g )( o ) 
+(-)(rw-)(rw-)(r--)
 \end{verbatim} 
 where the first set, u, refers to the permissions for the user who owns the file.
 The next set, g, refers to the permissions for the group that the file belongs to.
 The final set, o, refers to the permissions for any other user. 
-Each set uses `rwx' to specify the permission to (r)ead, (w)rite or e(x)ecute, or $-$ if that permission is not set.
+Each set uses `rwx' to specify the permission to (r)ead, (w)rite or e(x)ecute, or - if that permission is not set.
+Lets take a look at the folder other\_junk.
+\begin{verbatim}
+drwxrwxr-x
+\end{verbatim}
+This is a directory, the user has read/write/execute access, users belonging to the group of the file have read/write/execute access, and everyone else has read/execute access, but not write access.
+
+\subsection{Changing permissions}
+If you want to change a file's permissions, you can use \texttt{chmod}, meaning ``change mode". There are two ways to do this: using u/g/o and +/- r/w/x:
+\begin{verbatim}
+chmod o+x junk1 # Add execute permission to others
+chmod og+wx junk1 # Add execute and write permissions to other and group
+chmod +x junk1 # Make junk1 executable for the user
+chmod g-w junk1 # Remove write permissions from junk1 for group
+etc...
+\end{verbatim}
+or with a number that represents permissions, called a bitmask. This will set all the permissions at once for you.
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~/junk$ chmod 755 junk1
+cody@CODY-STUDIO-XPS:~/junk$ ls -l
+total 8
+-rwxr-xr-x 1 cody cody    9 Apr 25 21:28 junk1
+drwxrwxr-x 2 cody cody 4096 Apr 25 21:29 other_junk
+\end{verbatim}
+The bit mask is three digits (sometimes four digits) between the numbers 0 and 7. Each digit represents what the read/write/execute permissions would be in binary. Take a look:
+\begin{verbatim}
+0 = 000 = --- 
+1 = 001 = --x
+2 = 010 = -w-
+3 = 011 = -wx
+4 = 100 = r--
+5 = 101 = r-x
+6 = 110 = rw-
+7 = 111 = rwx
+\end{verbatim}
+So, as a few examples,
+\begin{verbatim}
+777 = rwxrwxrwx
+755 = rwxr-xr-x
+132 = --x-wx-w-
+564 = r-xrw-r--
+000 = ---------
+etc...
+\end{verbatim}
+So when we set our file junk1 to 755 earlier, we set it to rwxr-xr-x, which is a pretty good permission set on your average file. Realistically, you will usually always have your own user permissions set to rwx or rw-, otherwise you are just inconveniencing yourself. You can also use \texttt{chown} to change ownership of a file.
+
+\section{Secure Shell (SSH)}
+SSH gives you a secure, encrypted connection to a terminal session on a remote machine. It works exactly like a terminal session would on a local machine. 
+\begin{verbatim}
+ssh username@address
+ssh address # The username of the machine you are connecting from will be used
+\end{verbatim}
+Where \texttt{username} is your username on the remote machine and \texttt{address} is the address of the machine to connect to. 
+
+You can also use what is called `X forwarding' to run GUI applications on the remote machine, but have them display on the machine you are connecting from; you just use the -X or -Y switch.
+\begin{verbatim}
+ssh -X username@address
+ssh -Y username@address # Trusted X Forwarding
+\end{verbatim}
+\subsection{Secure Copy}
+Secure copy uses SSH to transfer files from one machine to another. The syntax is relatively simple:
+\begin{verbatim}
+# Copy from remote machine to local machine
+scp username@address:pathtosrcfile destonlocalmachine
+# Copy from local machine to remote machine
+scp fileonlocalmachine username@address:pathtodest
+\end{verbatim}
+Where \texttt{pathtosrcfile} and \texttt{pathtodest} are paths on the remote machine.
+
+\subsection{SSH keys}
+Public Key Cryptography\footnote{\url{http://en.wikipedia.org/wiki/Public-key_cryptography}} is used to protect what information is sent over SSH. There are two keys: a public key (to encrypt data) and a corresponding private key (to decrypt the encrypted data). Think of the public key as a padlock, and the private key as the key to open the padlock. 
+
+With SSH, you store your public key on the computer you're connecting to, and keep your private key on the computer you want to connect from. When an SSH connection is initiated, the RSA\footnote{\url{http://en.wikipedia.org/wiki/RSA_(algorithm)}} algorithm is used to check that the private key is correct for the public key, and if all is well you will be authenticated and given access.
+
+All files pertaining to SSH can be found at \texttt{\textasciitilde/.ssh}. To generate a new SSH key, you run the command \texttt{ssh-keygen}:
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/cody/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/cody/.ssh/id_rsa.
+Your public key has been saved in /home/cody/.ssh/id_rsa.pub.
+The key fingerprint is:
+8c:09:0a:43:d5:b3:1e:28:e3:8d:d4:8c:84:4f:72:b0 cody@CODY-STUDIO-XPS
+The key's randomart image is:
++--[ RSA 2048]----+
+|oo...            |
+|+oo  o           |
+|E=+ o o          |
+| B.= + +         |
+|o * . + S        |
+| o . .           |
+|                 |
+|                 |
+|                 |
++-----------------+
+cody@CODY-STUDIO-XPS:~$ cd ~/.ssh
+cody@CODY-STUDIO-XPS:~/.ssh$ ls
+id_rsa  id_rsa.pub
+\end{verbatim}
+\emph{Note: This is obviously not output from generating my real private/public keys. This data is essentially useless to me}
+If you decide to set a password, you will be prompted to enter that password to unlock your private key any time you want to connect via SSH.
+
+\subsection{SSH tunnelling}
+You can use what is known as SSH tunnelling, which is where you make all traffic pass through your SSH connection to protect your privacy and security, however that is beyond the scope of this guide. 
+
+\section{Further information}
+\begin{itemize}
+\item The Rute Users' Linux Expansion (recursive acronym RUTE, like GNU). \\ 
+\url{http://linux.2038bug.com/rute/meaning.html}
+
+\item Local Linux user group Wiki \\ \url{http://wiki.linux.net.nz/CategoryBeginners}
+
+\item A good book which I used to help me write this was "The Unix Programming Environment, 2nd edition" by Brian W. Kernighan and Rob Pike. I highly recommend it as it covers Unix systems far more in depth than this guide, plus it includes shell scripting and some low-level C programming. 
+
+\item And as always, there is Google.
+\end{itemize} 
 \end{document}
 
 
