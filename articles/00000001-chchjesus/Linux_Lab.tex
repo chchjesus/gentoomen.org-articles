@@ -212,9 +212,11 @@ cody@CODY-STUDIO-XPS:~$ Thu May 23 02:06:29 NZST 2013
 [1]+  Done                    ( sleep 15; date )
 cody@CODY-STUDIO-XPS:~$ 
 \end{verbatim}
-\texttt{(sleep 15; date)} is sent to the background and returns the process ID (PID), then the next \texttt{date} is run and the shell is returned. After sleeping for 15 seconds, the \texttt{date} sent to the background outputs and  the shell reports that the command completed.
+\texttt{(sleep 15; date)} is sent to the background and returns the process ID (PID), then the next \texttt{date} is run and the shell is returned. After sleeping for 15 seconds, the \texttt{date} sent to the background outputs and  the shell reports that the command completed. 
 
-Another way to list the processes running is with \texttt{ps}, and then end them with \texttt{pkill} or \texttt{killall} (kill by process name), or with \texttt{pkill} (kill by process ID), or even with they keyboard shortcut [Ctrl] + [C] as mentioned abouve.
+There is a command, \texttt{nohup} (no hangup), which prevents a program from being forcefully terminated under normal circumstances. We can combine this with \texttt{\&} to run programs that need to run uninterrupted for long periods of time. 
+
+Another way to list the processes running is with \texttt{ps}, and then end them with \texttt{pkill} or \texttt{killall} (kill by process name), or with \texttt{pkill} (kill by process ID), or even with they keyboard shortcut [Ctrl] + [C] as mentioned above.
 
 You can also check what is running in the background and foreground with \texttt{bg} and \texttt{fg}, respectively.
  
