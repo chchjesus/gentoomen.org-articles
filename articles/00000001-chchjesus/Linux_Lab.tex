@@ -11,18 +11,12 @@
 \date{\today}
 \maketitle
 
-\section{On using Linux}
-\begin{itemize}
-\item It (usually) costs you nothing.
-\item It is something new to try
-\end{itemize}
-
 \section{The Linux philosophy}
 The idea of Linux is simple-To take the idea of UNIX, which is to have a collection of programs and modules that work cohesively together-and make a free, open and community driven operating system that can be edited and customised to your heart's content.
 
 \section{A Brief History}
 
-I will gloss over a brief history of the origin and etymology of Linux. For more information on this subject, there is plenty of detailed history on the internet.
+I will gloss over a brief history of the origin and etymology of Linux. For more information on this subject, there is much more detail on the internet.
 
 \subsection{The GNU coreutils}
 In 1983, a large hairy man by the name of Richard Stallman was part of a programmer hobbyist group (read: early hackers) at Massachusetts Institute of Technology (MIT). He had become unhappy with this new operating system that had been created at Bell Labs, called Unix, because it was closed source and had become proprietary software. He worked tirelessly to replicate the output of the Bell Labs programmers, but instead as a free, non-proprietary system which resulted in the GNU Coreutils: the main software which makes up Linux (GNU being a recursive acronym for "GNU's Not Unix"). However, the kernel he had written didn't catch on, so for now his project was unsuccessful.
@@ -43,7 +37,7 @@ This guide will attempt to be distro-independent, however, a few of the more pop
 \item Arch Linux
 \item Gentoo
 \end{itemize}
-A quick internet search can list more and describe the pros and cons of most distributions out there. Protip: There are thousands of distros.
+A quick internet search can list more and describe the pros and cons of most distributions out there. Protip: There are thousands of them.
 
 \subsection{Package manager and repositories}
 Each distribution comes with a package manager, which handles software installed on the system and has a number of remote repositories from which it gets its software. For example, Ubuntu uses a package manager called aptitude (apt for short). You can type:
@@ -73,8 +67,9 @@ Some people like to use what is called a `Tiling Window Manager' (such as Awesom
 A desktop environment is a fully-fledged graphical display suite that (usually) adds a window manager, plus a whole lot of other software such as image editors, a music player and stuff which enhances the user experience. Because Linux is so flexible, some people usually just skip the Desktop environment and install a Window manager only because they want a lightweight system. A few examples of Desktop Environments are KDE, Gnome, Unity, XFCE, etc. Note that a Linux distro is not a desktop environment or window manager. In fact, most distros can be made to look quite similar by running the same desktop environments or window managers on them.
 
 \section{The Terminal}
-The terminal, also know as the Command Line, Shell, or just cold, emotionless text on a black background, gives you access to the real power and beating heart of Linux. This is what we will be focusing mostly on in this guide. Linux by default uses BASH, or Bourne-Again Shell which is based on the shell program `sh' from UNIX, written by Steven Bourne of Bell Labs. Bash will be all of our terminal interaction. 
-To manage multiple user sessions on a single machine, Linux (and UNIX) uses what is called a TeleTYpeWriter (TTY) for each user to interface with the main kernel. Each tty is handled by its own special device file, located in the directory \texttt{/dev}. It also uses Pseudo Terminal Slave (pts) to handle other types of terminal interface, but this is beyond the scope of this guide.
+The terminal, also know as the Command Line, Shell, or just cold, emotionless text on a black background, gives you access to the real power and beating heart of Linux. This is what we will be focusing mostly on in this guide. 
+
+Linux by default uses BASH, or Bourne-Again Shell which is based on the shell program `sh' from UNIX, written by Steven Bourne of Bell Labs. Bash will be all of our terminal interaction. To manage multiple user sessions on a single machine, Linux (and UNIX) uses what is called a TeleTYpeWriter (TTY) for each user to interface with the main kernel. Each tty is handled by its own special device file, located in the directory \texttt{/dev}. It also uses Pseudo Terminal Slave (pts) to handle other types of terminal interface, but this is beyond the scope of this guide.
 
 You may be wondering what the difference between shell and TTY is. Shell is the command interpreter that runs everything you type in, and TTY is the connection that handles the data between Linux and the shell.
 
@@ -130,7 +125,25 @@ tty	# Display which tty you are on
 \end{verbatim}
 
 \subsection{Keyboard shortcuts}
-Ctrl key, alt, auto-tab.
+Every key pressed ends a character to the terminal, and you can send different characters by holding down keys like [Ctrl] or [Alt]. This is how the shell can tell what key is pressed, and thus, allow shortcuts to be defined.
+Some of the more useful keyboard shortcuts are defined: 
+\begin{itemize}
+\item Up arrow or Down arrow \\
+Scroll through typed commands
+\item Home or End \\
+Move to the start or end of a line, respectively
+\item Tab\\
+Autocomplete a file name, directory name or command name.
+\item Ctrl + C \\
+End a running process 
+\item Ctrl + D \\
+End an End-Of-File (EOF) character (usually ends a process or signifies the end of input data) 
+\item Ctrl + Z \\
+Send the currently running process to the background 
+\item Ctrl + L \\
+Clear the screen, same as running the \texttt{clear} command
+\end{itemize}
+
 
 \subsection{Piping and redirection}
 There are a number of little quirks that the shell has that gives it more functionality.
@@ -201,7 +214,9 @@ cody@CODY-STUDIO-XPS:~$
 \end{verbatim}
 \texttt{(sleep 15; date)} is sent to the background and returns the process ID (PID), then the next \texttt{date} is run and the shell is returned. After sleeping for 15 seconds, the \texttt{date} sent to the background outputs and  the shell reports that the command completed.
 
-Another way to list the processes running is with \texttt{ps}, and then end them with \texttt{pkill} or \texttt{killall} (kill by process name), or with \texttt{pkill} (kill by process ID). You can also check what is running in the background and foreground with \texttt{bg} and \texttt{fg}, respectively.
+Another way to list the processes running is with \texttt{ps}, and then end them with \texttt{pkill} or \texttt{killall} (kill by process name), or with \texttt{pkill} (kill by process ID), or even with they keyboard shortcut [Ctrl] + [C] as mentioned abouve.
+
+You can also check what is running in the background and foreground with \texttt{bg} and \texttt{fg}, respectively.
  
 \section{File system structure}
 The file system is structured as a tree that flows down from the root directory, which is simply represented as /. I've taken a listing of my root directory as an example, using the ls command:
@@ -249,7 +264,7 @@ Linux uses a global terminal variable to find programs. This is the \$PATH varia
 cody@CODY-STUDIO-XPS:~$ echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 \end{verbatim}
-This would mean that if I were to use the program 'ls', it would search for a binary file called 'ls' in /usr/local/sbin, then in /usr/local/bin, and so on until it found it. Then it would be executed. Because these are searched in order, if you were to prepend a directory path to the front of \$PATH with your own copy of 'ls' in it, and then run the 'ls' command, then your copy would be run instead.
+This would mean that if I were to use the program 'ls', it would search for a binary file called 'ls' in /usr/local/sbin, then in /usr/local/bin, and so on until it found it. Then it would be executed. Because these are searched in order, if you were to prepend a directory path to the front of \$PATH with your own copy of \texttt{ls} in it, and then run the \texttt{ls} command, then your copy would be run instead.
 
 This is sometimes used as an exploit by modifying the user's \$PATH variable so that a path containing malicious binaries with the same names as common commands is on the front. When the user goes to run these commands, then the malicious binaries are run instead.
 
@@ -269,16 +284,16 @@ uid=0(root) gid=0(root) groups=0(root)
 \end{verbatim}
 Root is essentially god: root can do anything root likes, where other users would be denied due to the lack of permissions required. Root is the first account created on a newly installed Linux distro, and it is generally encouraged that you do not use the root account unless you absolutely have to because since root can do anything, then there's no stopping you from accidentally deleting something important, for example.
 
-This is where the 'sudo' command comes in (a.k.a "super-user do"). You can use sudo to execute commands that require elevated privileges without having to actually switch to root.
+This is where the \texttt{sudo} command comes in (a.k.a "super-user do"). You can use \texttt{sudo} to execute commands that require elevated privileges without having to actually switch to root.
 
-Say you want to edit the hostname file, which is the name of your computer, but, by default, you need elevated privileges to edit it. You would type:
+Say you want to edit the hostname file, which contains the name of your computer, but, by default, you need elevated privileges to edit it. You would type:
 \begin{verbatim}
 sudo nano /etc/hostname
 \end{verbatim}
 to which it asks you for your password, and then opens nano with the extra privileges provided by sudo. There is a sudoers file which contains a list of users who can use sudo, and what privileges they get from using it.
 
 \subsection{File permissions}
-Linux inherits its file permissions system from Unix. You can use the command `ls -l' to display the permissions of a file or files:
+Linux inherits its file permissions system from Unix. You can use the command \texttt{ls -l} to display the permissions of a file or files:
 \begin{verbatim}
 cody@CODY-STUDIO-XPS:~/junk$ ls -l
 total 8
@@ -287,8 +302,8 @@ drwxrwxr-x 2 cody cody 4096 Apr 25 21:29 other_junk
 \end{verbatim}
 The first string consists of a sequence of letters, which represent the permissions on the file. The two names refer to the owner and group the file belongs to, respectively.
 
-Lets take the file, junk1, as our example.
-The first character is the file type. This is a `d' if the file is a directory (like other\_junk).
+Lets take the file, \texttt{junk1}, as our example.
+The first character is the file type. This is a `d' if the file is a directory (like \texttt{other_junk}).
 The next part should be read as three sets of permissions
 \begin{verbatim}
 -rw-rw-r--
