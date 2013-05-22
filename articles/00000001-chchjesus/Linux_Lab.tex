@@ -32,7 +32,7 @@ In 1983, a large hairy man by the name of Richard Stallman was part of a program
 The linux kernel was written by Finnish programmer Linus Torvalds in 1991 as a hobby, which was a free and open-source alternative to a popular operating system at the time called MINIX. He wanted to name it Freax (Freak + Free + x), but eventually settled on Linux (Linus + x) at the advice of a friend. Once he had written the kernel, seeing the GNU project that had been written and released under the GNU General Public Licence (GPL), he took that work and combined it with his kernel, forming the first incarnation of what we know today as Linux.
 
 \section{Distributions}
-The base system of Linux comes in many different distributions which contain different packages and features, written by different groups. These are referred to as distros for short, and they have a wide variety of different uses, purposes, system, features, and fanbases.
+The base system of Linux comes in many different distributions which contain different packages and features written by different groups. These are referred to as distros for short, and they have a wide variety of different uses, purposes, system, features, and fanbases.
 This guide will attempt to be distro-independent, however, a few of the more popular distros are listed:
 \begin{itemize}
 \item Ubuntu
@@ -44,14 +44,21 @@ This guide will attempt to be distro-independent, however, a few of the more pop
 \item Arch Linux
 \item Gentoo
 \end{itemize}
-A quick internet search can list more and describe the pros and cons of most distributions out there. Protip: There are thousands of distos.
+A quick internet search can list more and describe the pros and cons of most distributions out there. Protip: There are thousands of distros.
 
 \subsection{Package manager and repositories}
-Each distribution comes with a package manager, which handles software installed on the system, and also has a number of remote repositories from which it gets its software. For example, Ubuntu uses a package manager called aptitude (apt for short). You can type:
+Each distribution comes with a package manager, which handles software installed on the system and has a number of remote repositories from which it gets its software. For example, Ubuntu uses a package manager called aptitude (apt for short). You can type:
 \begin{verbatim}
 sudo apt-get install firefox
 \end{verbatim}
-to install the Mozilla Firefox web browser. It will search the remote repositories (listed in /etc/apt/sources.list) for the required packages and instructions to install them. Then it will install the software on your computer for you. The package manager can also update and remove software, and manage your local package database. This is one of the brilliant things of the package manager: you can run a single command and you've installed new software. You can run a single command, and update all your packages, etc.
+to install the Mozilla Firefox web browser. It will search the remote repositories (listed in /etc/apt/sources.list) for the required packages and instructions to install them and once found, it will install the software on your computer for you. The package manager can also update and remove software, and manage your local package database. This is one of the brilliant things of a package manager: you can run a single command and you've installed new software--You can run a single command, and update all your packages, etc.
+
+Note: \texttt{apt-get} is the package manager for Ubuntu. Fedora uses \texttt{yum}, Arch uses \texttt{pacman}, and Debian uses \texttt{aptitude}. For instance:
+\begin{verbatim}
+yum install firefox
+\end{verbatim}
+Will install Firefox on a Fedora machine.
+You can also install multiple package managers on any one distro, but as they say: \emph{too many cooks spoil the broth}.
 
 \section{The X Window System}
 
@@ -62,12 +69,15 @@ Because at its core, Linux is just a text-based system, it has the Xorg server t
 A window manager is a piece of software that will change your window display and add more functionality, or allow you to customise it. It works as a client which interfaces with the Xorg server, and that's all a window manager really does-it manages windows. There are many different managers out there-some of them which work completely differently to how a window system would conventionally work on other systems.
 
 \subsection{Desktop Environment}
-A desktop environment is a fully-fledged graphical display suite that adds extra features that the Window manger can't do.  Desktop environments usually include their own Window managers among other things, and because linux is so flexible, some people usually just skip the Desktop environment and install a Window manager because they want a lightweight system. A few examples of Desktop Environments are KDE, Gnome, Unity, XFCE, etc. Note that a Linux distro is not a desktop environment or window manager. In fact, most distros can be made to look quite similar by running the same desktop environments or window managers, such as the GNOME desktop environment.
+A desktop environment is a fully-fledged graphical display suite that (usually) adds a window manager, plus a whole lot of other software such as image editors, a music player and stuff which enhances the user experience. Because Linux is so flexible, some people usually just skip the Desktop environment and install a Window manager only because they want a lightweight system. A few examples of Desktop Environments are KDE, Gnome, Unity, XFCE, etc. Note that a Linux distro is not a desktop environment or window manager. In fact, most distros can be made to look quite similar by running the same desktop environments or window managers on them.
 
 \section{The Terminal}
-The terminal, also know as the Command Line, Shell, or just cold, emotionless text on a black background, gives you access to the real power and beating heart of Linux. This is what we will be focusing mostly on in this guide. Linux by default uses BASH, or Bourne-Again Shell, which is based on the shell program 'sh' from UNIX. Bash will be all of our terminal interaction. 
+The terminal, also know as the Command Line, Shell, or just cold, emotionless text on a black background, gives you access to the real power and beating heart of Linux. This is what we will be focusing mostly on in this guide. Linux by default uses BASH, or Bourne-Again Shell which is based on the shell program `sh' from UNIX, written by Steven Bourne of Bell Labs. Bash will be all of our terminal interaction. 
+To manage multiple user sessions on a single machine, Linux (and UNIX) uses what is called a TeleTYpeWriter (TTY) for each user to interface with the main kernel. Each tty is handled by its own special device file, located in the directory \texttt{/dev}. It also uses Pseudo Terminal Slave (pts) to handle other types of terminal interface, but this is beyond the scope of this guide.
 
-The terminal uses files called stdout, stdin and stderr to handle text input and output to and from programs.
+You may be wondering what the difference between shell and TTY is. Shell is the command interpreter that runs everything you type in, and TTY is the connection that handles the data between Linux and the shell.
+
+The shell uses files called stdout, stdin and stderr to handle text input and output to and from programs.
 
 \begin{itemize}
 \item \textbf{stdin} - Standard Input - All your typed text input goes into programs through here.
@@ -83,16 +93,21 @@ Usage: man COMMAND
 \end{verbatim}
 Where COMMAND is replaced with whatever command you want help on. Press 'q' to exit a manual page.
 
-Now that you know how to use the manual, here is a list of the essential commands that you should become familiar with (and you can use the manual to learn how to use them): 
+Here is a list of the essential commands that you should become familiar with (and you can use the manual to learn how to use them): 
 \begin{verbatim}
 cd	# Change directory
 ls	# Show contents of directory
 echo	# Print text to the screen
 cat	# Display contents of a file
 nano	# Edit a file via the command line
+mv	# Move (or rename) a file
+cp	# Copy a file
+rm	# Remove (delete) a file
 \end{verbatim}
-Some extra commands which aren't essential but are certainly helpful:
+These are some extra commands which aren't totally essential but are certainly helpful:
 \begin{verbatim}
+mkdir	# Make a new directory
+rmdir	# Delete a direcory
 grep	# Search for specific text within text
 pwd	# Print working (current) directory
 whoami	# Display user
@@ -123,13 +138,25 @@ Redirection directs data in and out of files, i.e.
 \begin{verbatim}
 # Redirect stdout to file
 echo "Hello world" > helloworld.txt
-
+Linux
 # Redirect stdout to the end of a file
 echo "world." >> hello.txt
 
 # Redirect a file to stdin
 more < helloworld.txt
 \end{verbatim}
+
+\subsection{Wildcards}
+The shell uses a number of special characters called wildcards, similar to \emph{regular expressions} or \emph{regex}, which can be used to manipulate what is being dealt with on the command line. The standard wildcards are thus:
+\paragraph{*}
+Match 0 or more characters. For example, \texttt{rm *.txt} will delete all files that end in .txt, and \texttt{cp somedirectory/* .} will copy all files from `somedirectory' to the current directory.
+\paragraph{?}
+Match any single character. For example, \texttt{cp example.? somedir} will copy all files named `example' with a single character extension, into the directory `somedir' 
+\paragraph{[]}
+Match any single character in the square brackets. You can even specify a range, i.e. \texttt{rm m[a-e]m} will delete any files starting and ending with m, and with any letter between `a' and `e' in between. \texttt{rm m[abc]m} will delete files `mam', `mbm', `mcm'.
+\paragraph{\{\}}
+Match any item in the braces. For example, \texttt{cp \{*.doc,*.pdf\} \textasciitilde} copies any files with the extension `.doc' or `.pdf' to the home directory.
+
 
 \section{File system structure}
 The file system is structured as a tree that flows down from the root directory, which is simply represented as /. I've taken a listing of my root directory as an example, using the ls command:
@@ -151,6 +178,17 @@ ls .
 cd ~
 \end{verbatim}
 Linux will automatically complete a command or filename if you are part-way through typing it; all you have to do is hit the [Tab] key. Press [Tab] enough times and it will list possible suggestions based on what you currently have typed in the terminal.
+
+\subsection{File operations}
+There are a number of useful programs that allow us to do file manipulation. To list some of the main operations:
+\paragraph{cp} 
+Copy a file from one location to the other.
+\paragraph{mv}
+Move a file from one location to the other. Note, this is also used to rename files--you just `move' the file to the directory it is already in but as a new name, for example \texttt{mv foo bar} would rename the file from `foo' to `bar', assuming you didn't have a directory named `bar', in which case, the file would be moved to that directory instead.
+\paragraph{rm}
+Delete a file. Note that you can also delete empty directories this way, and you can delete a directory and its subdirectories by using \texttt{rm -r}. However, be \textbf{VERY} careful: if you were to run \texttt{rm -rf /}, you would erase every file on your whole computer, because it would delete the root directory and then every file and subdirectory below it and it wouldn't stop because the `f' in `-rf' means `force'. Use \texttt{rm -rf} with extreme caution, or even use \texttt{rmdir}, which removes a directory.
+\paragraph{grep}
+\texttt{grep} stands for Global Regular Expressions Parser, and can search through text for a match. For example, \texttt{grep foo bar} searches the file `bar' for the string `foo', and you can also use \texttt{ls -l $|$ grep "foo"}, which searches the file listing for a file called `foo'. When combined with \texttt{sed} and \texttt{awk}, you can do almost anything string related.
 
 \subsection{\$PATH and the environment}
 Variables in the shell are defined using the \texttt{export} command, and when variables are used, they start with a \$.
@@ -275,7 +313,7 @@ ssh -X username@address
 ssh -Y username@address # Trusted X Forwarding
 \end{verbatim}
 \subsection{Secure Copy}
-Secure copy uses SSH to transfer files from one machine to another. The syntax is relatively simple:
+Secure copy is like \texttt{cp} but uses SSH to transfer files from one machine to another.
 \begin{verbatim}
 # Copy from remote machine to local machine
 scp username@address:pathtosrcfile destonlocalmachine
@@ -324,12 +362,12 @@ You can use what is known as SSH tunnelling, which is where you make all traffic
 
 \section{Further information}
 \begin{itemize}
-\item The Rute Users' Linux Expansion (recursive acronym RUTE, like GNU). \\ 
+\item The Rute Users' Tutorial and Exposition (recursive acronym RUTE, like GNU). \\ 
 \url{http://linux.2038bug.com/rute/meaning.html}
 
 \item Local Linux user group Wiki \\ \url{http://wiki.linux.net.nz/CategoryBeginners}
 
-\item A good book which I used to help me write this was "The Unix Programming Environment, 2nd edition" by Brian W. Kernighan and Rob Pike. I highly recommend it as it covers Unix systems far more in depth than this guide, plus it includes shell scripting and some low-level C programming. 
+\item A good book which inspired and helped me write to write this document was "The Unix Programming Environment, 2nd edition" by Brian W. Kernighan and Rob Pike. I highly recommend it as it covers Unix systems far more in depth than this guide, plus it includes shell scripting, C programming, language parsing, and document typesetting. 
 
 \item And as always, there is Google.
 \end{itemize} 
