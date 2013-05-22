@@ -11,11 +11,10 @@
 \date{\today}
 \maketitle
 
-\section{Why you should use Linux}
+\section{On using Linux}
 \begin{itemize}
-\item Because it costs you nothing.
-\item Because some university courses expect you to, so deal with it.
-\item Because the design philosophy caters towards being a power-user of your computer.
+\item It (usually) costs you nothing.
+\item It is something new to try
 \end{itemize}
 
 \section{The Linux philosophy}
@@ -66,7 +65,9 @@ You can also install multiple package managers on any one distro, but as they sa
 Because at its core, Linux is just a text-based system, it has the Xorg server to provide graphical windows. Xorg is a program that runs in the background (called a \emph{daemon}) that simply runs the windows for your display. It is a very simplistic server, with which clients communicate with to display your windows. If you're \emph{especially} hardcore, you can install a Linux system without an Xorg server, and just interact with the terminal. 
 
 \subsection{Window manager}
-A window manager is a piece of software that will change your window display and add more functionality, or allow you to customise it. It works as a client which interfaces with the Xorg server, and that's all a window manager really does-it manages windows. There are many different managers out there-some of them which work completely differently to how a window system would conventionally work on other systems.
+A window manager is a piece of software that will change your window display and add more functionality, or allow you to customise it. It works as a client which interfaces with the Xorg server, and that's all a window manager really does-it manages windows. There are many different managers out there-some of them which work completely differently to how a window system would conventionally work on other systems. 
+
+Some people like to use what is called a `Tiling Window Manager' (such as Awesome WM), which splits your screen space up into squares (tiles) and allows you to switch between them using they keyboard. They then extend these with scripts that they write, and, using \texttt{vim} or \texttt{emacs} they completely remove the need to use the mouse.
 
 \subsection{Desktop Environment}
 A desktop environment is a fully-fledged graphical display suite that (usually) adds a window manager, plus a whole lot of other software such as image editors, a music player and stuff which enhances the user experience. Because Linux is so flexible, some people usually just skip the Desktop environment and install a Window manager only because they want a lightweight system. A few examples of Desktop Environments are KDE, Gnome, Unity, XFCE, etc. Note that a Linux distro is not a desktop environment or window manager. In fact, most distros can be made to look quite similar by running the same desktop environments or window managers on them.
@@ -91,7 +92,7 @@ Firstly you should get familiar with the man pages, which are essentially the ma
 \begin{verbatim}
 Usage: man COMMAND
 \end{verbatim}
-Where COMMAND is replaced with whatever command you want help on. Press 'q' to exit a manual page.
+Where COMMAND is replaced with whatever command you want help on. Press 'q' to exit a manual page. Alternatively, most commands will allow you to add \texttt{--help} on the end to get their own personal help pages.
 
 Here is a list of the essential commands that you should become familiar with (and you can use the manual to learn how to use them): 
 \begin{verbatim}
@@ -107,7 +108,7 @@ rm	# Remove (delete) a file
 These are some extra commands which aren't totally essential but are certainly helpful:
 \begin{verbatim}
 mkdir	# Make a new directory
-rmdir	# Delete a direcory
+rmdir	# Delete a directory
 grep	# Search for specific text within text
 pwd	# Print working (current) directory
 whoami	# Display user
@@ -125,9 +126,13 @@ less	# Display text one screenful at a time
 wc	# Word/letter/byte count
 id	# Display the uid, gid and groups of a user
 su	# Switch user
+tty	# Display which tty you are on
 \end{verbatim}
 
-\subsection{Shell conventions}
+\subsection{Keyboard shortcuts}
+Ctrl key, alt, auto-tab.
+
+\subsection{Piping and redirection}
 There are a number of little quirks that the shell has that gives it more functionality.
 Piping takes the stdout of the left program and connects it (i.e. \emph{pipe}s it) into stdin of the right program with the pipe operator $|$. For example:
 \begin{verbatim}
@@ -138,7 +143,7 @@ Redirection directs data in and out of files, i.e.
 \begin{verbatim}
 # Redirect stdout to file
 echo "Hello world" > helloworld.txt
-Linux
+
 # Redirect stdout to the end of a file
 echo "world." >> hello.txt
 
@@ -157,7 +162,47 @@ Match any single character in the square brackets. You can even specify a range,
 \paragraph{\{\}}
 Match any item in the braces. For example, \texttt{cp \{*.doc,*.pdf\} \textasciitilde} copies any files with the extension `.doc' or `.pdf' to the home directory.
 
+\subsection{Conditional execution}
+You can chain commands together on one line by separating them with a semicolon `;'.
+\begin{verbatim}
+cmd1; cmd2; cmd3
+\end{verbatim}
+However, every program returns a number back to the OS once it has finished running to tell if it completed successfully or not, and we can use this to chain execute commands conditionally.\\
+To run a command if and only if the last command completed successfully, we use \texttt{\&\&}:
 
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ mkdir foo && cd foo && echo "hooray" > somefile
+cody@CODY-STUDIO-XPS:~/foo$ cat somefile 
+hooray
+cody@CODY-STUDIO-XPS:~/foo$
+\end{verbatim}
+To run a command if and only if the last command failed, we use \texttt{||}:
+
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ ls foo || cd foo || mkdir foo && ls -ld foo
+ls: cannot access foo: No such file or directory
+bash: cd: foo: No such file or directory
+drwxrwxr-x 2 cody cody 4096 May 23 00:57 foo
+\end{verbatim}
+
+\subsection{Processes}
+Every program that runs, runs in virtual memory as a process, even the shell. You can list the currently running processes with the command \texttt{top}.
+When you run a command, the terminal session runs it on its process, waits for it to complete, then regains control once the command is finished. So, if you were to close the terminal window while a command was running, that would stop the command. Since this can be inconvenient, we can `fork' the command into its own process to run in the background, and still use the shell while it runs (which is useful for commands that take a long time). To do this, we end the command with a single ampersand \texttt{\&}. For example:
+
+\begin{verbatim}
+cody@CODY-STUDIO-XPS:~$ (sleep 15; date) & date 
+[1] 12186
+Thu May 23 02:06:14 NZST 2013
+cody@CODY-STUDIO-XPS:~$ 
+cody@CODY-STUDIO-XPS:~$ Thu May 23 02:06:29 NZST 2013
+
+[1]+  Done                    ( sleep 15; date )
+cody@CODY-STUDIO-XPS:~$ 
+\end{verbatim}
+\texttt{(sleep 15; date)} is sent to the background and returns the process ID (PID), then the next \texttt{date} is run and the shell is returned. After sleeping for 15 seconds, the \texttt{date} sent to the background outputs and  the shell reports that the command completed.
+
+Another way to list the processes running is with \texttt{ps}, and then end them with \texttt{pkill} or \texttt{killall} (kill by process name), or with \texttt{pkill} (kill by process ID). You can also check what is running in the background and foreground with \texttt{bg} and \texttt{fg}, respectively.
+ 
 \section{File system structure}
 The file system is structured as a tree that flows down from the root directory, which is simply represented as /. I've taken a listing of my root directory as an example, using the ls command:
 \begin{verbatim}
@@ -188,7 +233,7 @@ Move a file from one location to the other. Note, this is also used to rename fi
 \paragraph{rm}
 Delete a file. Note that you can also delete empty directories this way, and you can delete a directory and its subdirectories by using \texttt{rm -r}. However, be \textbf{VERY} careful: if you were to run \texttt{rm -rf /}, you would erase every file on your whole computer, because it would delete the root directory and then every file and subdirectory below it and it wouldn't stop because the `f' in `-rf' means `force'. Use \texttt{rm -rf} with extreme caution, or even use \texttt{rmdir}, which removes a directory.
 \paragraph{grep}
-\texttt{grep} stands for Global Regular Expressions Parser, and can search through text for a match. For example, \texttt{grep foo bar} searches the file `bar' for the string `foo', and you can also use \texttt{ls -l $|$ grep "foo"}, which searches the file listing for a file called `foo'. When combined with \texttt{sed} and \texttt{awk}, you can do almost anything string related.
+\texttt{grep} stands for Global Regular Expressions Parser, and can search through text for a match. For example, \texttt{grep foo bar} searches the file \texttt{bar} for the string \texttt{foo}, and you can also use \texttt{ls -l $|$ grep "foo"}, which searches the file listing for a file called \texttt{foo}. When combined with \texttt{sed} and \texttt{awk}, you can do almost anything string related.
 
 \subsection{\$PATH and the environment}
 Variables in the shell are defined using the \texttt{export} command, and when variables are used, they start with a \$.
@@ -254,7 +299,7 @@ where the first set, u, refers to the permissions for the user who owns the file
 The next set, g, refers to the permissions for the group that the file belongs to.
 The final set, o, refers to the permissions for any other user. 
 Each set uses `rwx' to specify the permission to (r)ead, (w)rite or e(x)ecute, or - if that permission is not set.
-Lets take a look at the folder other\_junk.
+Lets take a look at the folder \texttt{other_junk}.
 \begin{verbatim}
 drwxrwxr-x
 \end{verbatim}
@@ -355,6 +400,7 @@ cody@CODY-STUDIO-XPS:~/.ssh$ ls
 id_rsa  id_rsa.pub
 \end{verbatim}
 \emph{Note: This is obviously not output from generating my real private/public keys. This data is essentially useless to me}
+
 If you decide to set a password, you will be prompted to enter that password to unlock your private key any time you want to connect via SSH.
 
 \subsection{SSH tunnelling}
@@ -365,12 +411,20 @@ You can use what is known as SSH tunnelling, which is where you make all traffic
 \item The Rute Users' Tutorial and Exposition (recursive acronym RUTE, like GNU). \\ 
 \url{http://linux.2038bug.com/rute/meaning.html}
 
-\item Local Linux user group Wiki \\ \url{http://wiki.linux.net.nz/CategoryBeginners}
+\item Local Linux user group wiki \\ \url{http://wiki.linux.net.nz/CategoryBeginners}
 
 \item A good book which inspired and helped me write to write this document was "The Unix Programming Environment, 2nd edition" by Brian W. Kernighan and Rob Pike. I highly recommend it as it covers Unix systems far more in depth than this guide, plus it includes shell scripting, C programming, language parsing, and document typesetting. 
 
 \item And as always, there is Google.
 \end{itemize} 
+\begin{center}
+This document was typeset and compiled in \LaTeX.\\
+\url{http://www.latex-project.org/} \\
+A tutorial on how to use it: \\
+\url{http://en.wikibooks.org/wiki/LaTeX} \\
+The editor that I use (available from most package managers): \\
+\url{http://www.xm1math.net/texmaker/} \\
+\end{center}
 \end{document}
 
 
